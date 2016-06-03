@@ -1,0 +1,48 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "virtualNetworkName": {
+      "type": "string",
+      "defaultValue": "cbVNet",
+      "metadata": {
+        "description": "Virtual Network"
+      }
+    }
+  },
+  "variables": {
+    "templateBaseUrl": "https://dsi.git.cloudforge.com/arm_templates/ARG_Link_Tempaltes_Test/ARG_Link_Tempaltes_Test/Templates",
+    "shared-resourcesTemplateFilePath": "shared-resources.json",
+    "shared-resourcesTemplateParametersFilePath": "shared-resources.parameters.json",
+    "networkSettings": {
+      "virtualNetworkName": "[parameters('virtualNetworkName')]",
+      "addressPrefix": "10.5.0.0/16",
+      "subnet": {
+        "name": "couchSubnet",
+        "prefix": "10.5.0.0/24"
+      },
+      "nodesIpPrefix": "10.5.0.1"
+    }
+  },
+  "resources": [
+    {
+      "name": "shared-resources",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [ ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateBaseUrl'), variables('shared-resourcesTemplateFilePath'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parametersLink": {
+          "uri": "[concat(variables('templateBaseUrl'), variables('shared-resourcesTemplateParametersFilePath'))]",
+          "contentVersion": "1.0.0.0"
+        }
+      }
+    }
+  ],
+  "outputs": {
+  }
+}
